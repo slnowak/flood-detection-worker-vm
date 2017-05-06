@@ -41,4 +41,5 @@ public class EventProcessor implements IEventProcessor {
         }
         System.out.println("SAMPLE: Partition " + context.getPartitionId() + " batch size was " + messageCount + " for host " + context.getOwner());
     }
+
 }
