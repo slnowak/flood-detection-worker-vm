@@ -1,5 +1,6 @@
 package pl.edu.agh.azurevm;
 
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -8,12 +9,15 @@ public class Configuration {
 
     static {
         properties = new Properties();
-        InputStream in = Configuration.class.getResourceAsStream("/app-config.properties");
-        try {
-            properties.load(in);
-            in.close();
+
+        try(InputStream localCfg = Configuration.class.getResourceAsStream("/app-config.properties");
+            InputStream systemCfg = new FileInputStream("/etc/environment")) {
+
+            InputStream cfg = localCfg != null ? localCfg : systemCfg;
+            properties.load(cfg);
+
         } catch (Exception e) {
-            throw new RuntimeException("Provide /app-config.properties file in /src/main/resources directory", e);
+            throw new RuntimeException("Provide /app-config.properties file in /src/main/resources directory or /etc/environment file", e);
         }
     }
 
